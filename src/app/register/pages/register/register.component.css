@@ -1,0 +1,35 @@
+.title,
+label {
+  color: #5255a9;
+}
+
+.input-group {
+  display: block;
+  flex-wrap: unset;
+}
+
+@media (min-width: 576px) {
+  .input-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.title {
+  border-style: none none solid solid;
+  border-color: #0f057e;
+}
+
+.title > img {
+  padding-bottom: 1px;
+}
+
+label {
+  padding: 1px 8px 0 0;
+}
+
+input {
+  border-radius: 0;
+  border-color: #9999ff;
+  outline: none;
+}
