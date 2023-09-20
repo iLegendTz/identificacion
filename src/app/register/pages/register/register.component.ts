@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Country, State, City, IState, ICity, ICountry } from 'country-state-city';
 
-import { CustomValidators } from '../../../utils/validators';
+import { PersonService } from '../../services/person.service';
 
-import genders from '../../../../assets/genders.json';
-import bloodTypes from '../../../../assets/bloodTypes.json';
-import maritalStatus from '../../../../assets/maritalStatus.json';
-import supervisors from '../../../../assets/supervisors.json';
+import { CustomValidators } from '@utils/validators';
+
+import genders from '@assets/genders.json';
+import bloodTypes from '@assets/bloodTypes.json';
+import maritalStatus from '@assets/maritalStatus.json';
+import supervisors from '@assets/supervisors.json';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,7 @@ import supervisors from '../../../../assets/supervisors.json';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  saved: 'success' | 'failed' | null = null
   today = new Date().toISOString().split("T")[0];
   regexNames = new RegExp('^(\s)*[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*(\s)*$');
   numberWithDecimals = new RegExp('^[1-9][0-9]?(\.[0-9]{1,2})?$');
@@ -28,6 +31,7 @@ export class RegisterComponent {
   provinces: IState[] = [];
   localities: ICity[] = [];
 
+  constructor(private personService: PersonService) { }
 
   registerForm: FormGroup = new FormGroup({
     fatherLastName: new FormControl(null, [Validators.required, Validators.pattern(this.regexNames)]),
@@ -62,5 +66,14 @@ export class RegisterComponent {
   }
 
   onSubmit() {
+    this.personService.putPerson(this.registerForm.value).subscribe({
+      next: () => {
+        this.saved = 'success';
+        this.registerForm.reset();
+      },
+      error: () => {
+        this.saved = 'failed';
+      }
+    });
   }
 }
