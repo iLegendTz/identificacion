@@ -5,7 +5,8 @@ import { RegisterComponent } from './pages/register/register.component';
 const routes: Routes = [
   {
     path: '',
-    component: RegisterComponent
+    component: RegisterComponent,
+    title: 'Identificacion'
   },
   {
     path: '**',
