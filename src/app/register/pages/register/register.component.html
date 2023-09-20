@@ -6,152 +6,483 @@
 </div>
 
 <div class="container">
-  <form action="">
+  <form [formGroup]="registerForm" (submit)="onSubmit()">
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="fatherLastName"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >*Paterno</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="fatherLastName"
+          id="fatherLastName"
+          name="fatherLastName"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['fatherLastName'].invalid &&
+            registerForm.controls['fatherLastName'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('fatherLastName')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+          <div *ngIf="registerForm.get('fatherLastName')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end">Materno</label>
+      <label
+        for="motherLastName"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
+        >Materno</label
+      >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="motherLastName"
+          id="motherLastName"
+          name="motherLastName"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['motherLastName'].invalid &&
+            registerForm.controls['motherLastName'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('motherLastName')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end">*Nombre</label>
+      <label for="name" class="col-sm-2 fw-bold col-form-label text-sm-end"
+        >*Nombre</label
+      >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="name"
+          id="name"
+          name="name"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['name'].invalid &&
+            registerForm.controls['name'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('name')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+          <div *ngIf="registerForm.get('name')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end">*Sexo</label>
+      <label for="gender" class="col-sm-2 fw-bold col-form-label text-sm-end"
+        >*Sexo</label
+      >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="gender"
+          name="gender"
+          id="gender"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona un sexo</option>
+          <option *ngFor="let gender of lstGenders">{{ gender.name }}</option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['gender'].invalid &&
+            registerForm.controls['gender'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('gender')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="birthday" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >*Fecha Nac.</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="date" />
+        <input
+          formControlName="birthday"
+          id="birthday"
+          name="birthday"
+          class="form-control form-control-sm"
+          type="date"
+          [max]="today"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['birthday'].invalid &&
+            registerForm.controls['birthday'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('birthday')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+          <div *ngIf="registerForm.get('birthday')?.getError('invalidDate')">
+            Fecha invalida
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="country" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >*País Nac.</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="country"
+          name="country"
+          id="country"
+          class="form-control form-control-sm"
+          (change)="onCountryChange()"
+        >
+          <option [ngValue]="null">Selecciona un país</option>
+          <option *ngFor="let country of countries" [ngValue]="country.isoCode">
+            {{ country.name }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['country'].invalid &&
+            registerForm.controls['country'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('country')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="province" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >*Provincia Nac.</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="province"
+          name="province"
+          id="province"
+          class="form-control form-control-sm"
+          (change)="onProvinceChange()"
+        >
+          <option [ngValue]="null">Selecciona una provincia</option>
+          <option
+            *ngFor="let province of provinces"
+            [ngValue]="province.isoCode"
+          >
+            {{ province.name }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['province'].invalid &&
+            registerForm.controls['province'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('province')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="locality" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >*Localidad Nac.</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="locality"
+          name="locality"
+          id="locality"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona una localidad</option>
+          <option *ngFor="let locality of localities" [ngValue]="locality.name">
+            {{ locality.name }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['locality'].invalid &&
+            registerForm.controls['locality'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('locality')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end">Peso</label>
+      <label for="weight" class="col-sm-2 fw-bold col-form-label text-sm-end"
+        >Peso</label
+      >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="weight"
+          id="weight"
+          name="weight"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['weight'].invalid &&
+            registerForm.controls['weight'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('weight')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+          <div *ngIf="registerForm.get('weight')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="height" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Estatura</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="height"
+          id="height"
+          name="height"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['height'].invalid &&
+            registerForm.controls['height'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('height')?.getError('required')">
+            Este campo es obligatorio
+          </div>
+          <div *ngIf="registerForm.get('height')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="bloodType" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Gpo. Sanguineo</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="bloodType"
+          name="bloodType"
+          id="bloodType"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona un grupo sanguineo</option>
+          <option
+            *ngFor="let bloodType of lstBloodTypes"
+            [ngValue]="bloodType.type"
+          >
+            {{ bloodType.type }}
+          </option>
+        </select>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="nacionality"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Nacionalidad</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="nacionality"
+          name="nacionality"
+          id="nacionality"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona una nacionalidad</option>
+          <option *ngFor="let country of countries" [ngValue]="country.isoCode">
+            {{ country.name }}
+          </option>
+        </select>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="maritalStatus"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Estado Civil</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="maritalStatus"
+          name="maritalStatus"
+          id="maritalStatus"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona un estado civil</option>
+          <option
+            *ngFor="let maritalStatus of lstMaritalStatus"
+            [ngValue]="maritalStatus.name"
+          >
+            {{ maritalStatus.name }}
+          </option>
+        </select>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="licenceNumber"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Número de Licencia</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="licenceNumber"
+          id="licenceNumber"
+          name="licenceNumber"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['licenceNumber'].invalid &&
+            registerForm.controls['licenceNumber'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('licenceNumber')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="passportNumber"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Num. Pasaporte</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <input
+          formControlName="passportNumber"
+          id="passportNumber"
+          name="passportNumber"
+          class="form-control form-control-sm"
+          type="text"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['passportNumber'].invalid &&
+            registerForm.controls['passportNumber'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('passportNumber')?.getError('pattern')">
+            Valor invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label for="email" class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Dirección E-mail</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="email" />
+        <input
+          formControlName="email"
+          id="email"
+          name="email"
+          class="form-control form-control-sm"
+          type="email"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            registerForm.controls['email'].invalid &&
+            registerForm.controls['email'].touched
+          "
+        >
+          <div *ngIf="registerForm.get('email')?.getError('email')">
+            Email invalido
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="input-group mb-2">
-      <label class="col-sm-2 fw-bold col-form-label text-sm-end"
+      <label
+        for="supervisor"
+        class="col-sm-2 fw-bold col-form-label text-sm-end"
         >Supervisor</label
       >
       <div class="col-sm-10 ps-sm-0">
-        <input class="form-control form-control-sm" type="text" />
+        <select
+          formControlName="supervisor"
+          name="supervisor"
+          id="supervisor"
+          class="form-control form-control-sm"
+        >
+          <option [ngValue]="null">Selecciona un supervisor</option>
+          <option
+            *ngFor="let supervisor of lstSupervisors"
+            [ngValue]="supervisor.name"
+          >
+            {{ supervisor.name }}
+          </option>
+        </select>
       </div>
     </div>
 
     <button type="submit" class="btn btn-success w-100 my-1">Guardar</button>
   </form>
+
+  {{ registerForm.value | json }}
+
+  <!-- {{ gender }} -->
 </div>

@@ -28,7 +28,8 @@ label {
   padding: 1px 8px 0 0;
 }
 
-input {
+input,
+select {
   border-radius: 0;
   border-color: #9999ff;
   outline: none;
